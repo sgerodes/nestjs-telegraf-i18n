@@ -13,7 +13,6 @@
     "version:patch": "pnpm version patch",
     "version:minor": "pnpm version minor",
     "prepublishOnly": "pnpm run build",
-    "publish": "pnpm publish",
     "test": "jest",
     "test:verbose": "DEBUG_TESTS=1 jest",
     "test:watch": "jest --watch",
