@@ -15,6 +15,7 @@
     "prepublishOnly": "pnpm run build",
     "publish": "pnpm publish",
     "test": "jest",
+    "test:verbose": "DEBUG_TESTS=1 jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
   },
@@ -24,6 +25,9 @@
     "moduleFileExtensions": [
       "ts",
       "js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/jest.setup.ts"
     ]
   },
   "devDependencies": {
