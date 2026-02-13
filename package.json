@@ -98,8 +98,10 @@
     "localisation",
     "translation",
     "multilingual",
+    "multi-language",
     "language",
     "locale",
+    "intl",
     "middleware"
   ]
 }
