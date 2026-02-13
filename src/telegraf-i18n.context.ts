@@ -24,7 +24,7 @@ export class TelegrafI18nContext<
    * @param options - Optional translation options.
    * @returns The translated value or the key itself.
    */
-  public translate<P extends Path<K>, R = PathValue<K, P>>(
+  public t<P extends Path<K>, R = PathValue<K, P>>(
     key: P,
     options?: TranslateOptions,
   ): R | string {
@@ -38,13 +38,13 @@ export class TelegrafI18nContext<
   }
 
   /**
-   * Shorthand for `translate()`. Translates the given key using the current i18n context.
+   * Alias for `t()`. Translates the given key using the current i18n context.
    */
-  public t<P extends Path<K>, R = PathValue<K, P>>(
+  public translate<P extends Path<K>, R = PathValue<K, P>>(
     key: P,
     options?: TranslateOptions,
   ): R | string {
-    return this.translate<P, R>(key, options);
+    return this.t<P, R>(key, options);
   }
 
   /**
@@ -53,7 +53,7 @@ export class TelegrafI18nContext<
    * @param key - The translation key path.
    * @param options - Optional translation and reply options.
    */
-  public async replyWithTranslation<P extends Path<K>, R = PathValue<K, P>>(
+  public async tReply<P extends Path<K>, R = PathValue<K, P>>(
     key: P,
     options?: TranslateOptions & {
       replyOptions?: Parameters<TelegrafContext["reply"]>[1];
@@ -64,14 +64,14 @@ export class TelegrafI18nContext<
   }
 
   /**
-   * Shorthand for `replyWithTranslation()`. Translates the given key and sends it as a reply message using `ctx.reply`.
+   * Alias for `tReply()`. Translates the given key and sends it as a reply message using `ctx.reply`.
    */
-  public async tReply<P extends Path<K>, R = PathValue<K, P>>(
+  public async replyWithTranslation<P extends Path<K>, R = PathValue<K, P>>(
     key: P,
     options?: TranslateOptions & {
       replyOptions?: Parameters<TelegrafContext["reply"]>[1];
     },
   ): Promise<void> {
-    return this.replyWithTranslation<P, R>(key, options);
+    return this.tReply<P, R>(key, options);
   }
 }
