@@ -1,15 +1,25 @@
-# Nestjs Telegraf I18n ![npm](https://img.shields.io/npm/v/nestjs-telegraf-i18n) ![npm](https://img.shields.io/npm/dm/nestjs-telegraf-i18n) ![Last Commit](https://img.shields.io/github/last-commit/sgerodes/nestjs-telegraf-i18n) ![NPM](https://img.shields.io/npm/l/nestjs-telegraf-i18n)
+# Nestjs Telegraf I18n
+
+![npm](https://img.shields.io/npm/v/nestjs-telegraf-i18n) ![npm](https://img.shields.io/npm/dm/nestjs-telegraf-i18n) ![GitHub stars](https://img.shields.io/github/stars/sgerodes/nestjs-telegraf-i18n) ![Last Commit](https://img.shields.io/github/last-commit/sgerodes/nestjs-telegraf-i18n) ![NPM](https://img.shields.io/npm/l/nestjs-telegraf-i18n)
 
 Seamless integration of [nestjs-telegraf](https://www.npmjs.com/package/nestjs-telegraf) and [nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n).
 A middleware that merges both contexts.
 
 ```typescript
-handle_start_command(ctx: TelegrafI18nContext) { 
-    // Translates the message into the user specific language automatically
-    const internationalized_message = ctx.t("i18n.menus.hello.message");
-    await ctx.reply(internationalized_message);
+@Start()
+async startCommand(@Ctx() ctx: TelegrafI18nContext) {
+    // Translates the message into the user's language automatically
+    await ctx.tReply("greeting.hello");
 }
 ```
+
+## Features
+
+- Automatic language detection from Telegram user settings
+- Full TypeScript support with type-safe translation keys
+- Convenient `t()` and `tReply()` methods on context
+- Works with Scenes, Wizards, and custom middlewares
+- Compatible with nestjs-i18n's type generation
 
 Install nestjs-telegraf-i18n
 ```shell
@@ -77,8 +87,15 @@ The middleware injects the i18n object into the Telegraf context with the contex
 
 In your function make the ctx type aware that it has the i18n object by providing the type `TelegrafI18nContext`
 
-Use `ctx.t("<your_i18n_key>")` or `ctx.translate("<your_i18n_key>")` for the translations.
+### Available Methods
 
+| Method | Description |
+|--------|-------------|
+| `ctx.t(key, options?)` | Translate a key |
+| `ctx.translate(key, options?)` | Alias for `t()` |
+| `ctx.tReply(key, options?)` | Translate and reply in one call |
+| `ctx.replyWithTranslation(key, options?)` | Alias for `tReply()` |
+| `ctx.i18n()` | Get the underlying I18nContext |
 
 ```typescript
 import { Ctx, Start, Update } from 'nestjs-telegraf';
@@ -87,9 +104,13 @@ import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 @Update()
 export class BotUpdate {
     @Start()
-    async start_command(@Ctx() ctx: TelegrafI18nContext) {
-        const internationalized_message = ctx.t("i18n.menus.hello.message");
-        await ctx.reply(internationalized_message);
+    async startCommand(@Ctx() ctx: TelegrafI18nContext) {
+        // Option 1: Translate and reply separately
+        const message = ctx.t("greeting.hello");
+        await ctx.reply(message);
+
+        // Option 2: Translate and reply in one call
+        await ctx.tReply("greeting.hello");
     }
 }
 ```
@@ -105,10 +126,9 @@ import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 export class BotUpdate {
     @Command('hello')
     async helloCommand(@Ctx() ctx: Scenes.WizardContext & TelegrafI18nContext) {
-        // You have access to both the WizardContext and TelegrafI18nContext internals
-        const internationalized_message = ctx.t("i18n.menus.hello.message");
-        await ctx.reply(internationalized_message);
-        await ctx.scene.enter('some_scene');
+        // You have access to both the WizardContext and TelegrafI18nContext
+        await ctx.tReply("greeting.hello");
+        await ctx.scene.enter('someScene');
     }
 }
 
@@ -146,9 +166,9 @@ Follow their instructions to generate the translation types, and you can pass th
 @Update()
 export class BotUpdate {
     @Start()
-    async start_command(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
-        const internationalized_message = ctx.t("i18n.menus.hello.message");
-        await ctx.reply(internationalized_message);
+    async startCommand(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
+        // TypeScript will autocomplete and validate your translation keys
+        await ctx.tReply("greeting.hello");
     }
 }
 ```
@@ -218,9 +238,10 @@ export class TelegramModule {}
 ```
 
 ## I18nContext
-If you need the I18nContext object you can use the getter
+If you need the underlying I18nContext object directly:
 ```typescript
-    async somefuntion(ctx: TelegrafI18nContext) {
-        const i18nContext = ctx.i18n();
-    }
+async someHandler(@Ctx() ctx: TelegrafI18nContext) {
+    const i18nContext = ctx.i18n();
+    const currentLang = i18nContext?.lang;
+}
 ```
