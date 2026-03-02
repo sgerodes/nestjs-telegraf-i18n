@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",
-    "@nestjs/common": "^10.4.22",
-    "@nestjs/core": "^10.4.22",
-    "@nestjs/testing": "^10.4.22",
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/testing": "^11.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.0",
     "@typescript-eslint/eslint-plugin": "^8.27.0",
@@ -51,8 +51,8 @@
     "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "@nestjs/common": "^9.0.0 || ^10.0.0",
-    "@nestjs/core": "^9.0.0 || ^10.0.0",
+    "@nestjs/common": ">=9.0.0",
+    "@nestjs/core": ">=9.0.0",
     "nestjs-i18n": "^10.5.0",
     "nestjs-telegraf": "^2.8.1",
     "telegraf": "^4.0.0"
